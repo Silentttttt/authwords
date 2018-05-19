@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blockchainlove.vow.domain.dao.VowTradeMapper">
+  <resultMap id="BaseResultMap" type="com.blockchainlove.vow.domain.entity.VowTrade">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmt_modified" />
+    <result column="order_no" jdbcType="VARCHAR" property="order_no" />
+    <result column="trade_channel" jdbcType="VARCHAR" property="trade_channel" />
+    <result column="trade_no" jdbcType="VARCHAR" property="trade_no" />
+    <result column="trade_status" jdbcType="VARCHAR" property="trade_status" />
+    <result column="trade_create_time" jdbcType="TIMESTAMP" property="trade_create_time" />
+    <result column="trade_pay_time" jdbcType="VARCHAR" property="trade_pay_time" />
+    <result column="trade_close_time" jdbcType="VARCHAR" property="trade_close_time" />
+    <result column="trade_expire_time" jdbcType="VARCHAR" property="trade_expire_time" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    id, gmt_create, gmt_modified, order_no, trade_channel, trade_no, trade_status, trade_create_time, 
+    trade_pay_time, trade_close_time, trade_expire_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from vow_trade
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    delete from vow_trade
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.blockchainlove.vow.domain.entity.VowTrade">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    insert into vow_trade (id, gmt_create, gmt_modified, 
+      order_no, trade_channel, trade_no, 
+      trade_status, trade_create_time, trade_pay_time, 
+      trade_close_time, trade_expire_time)
+    values (#{id,jdbcType=BIGINT}, #{gmt_create,jdbcType=TIMESTAMP}, #{gmt_modified,jdbcType=TIMESTAMP}, 
+      #{order_no,jdbcType=VARCHAR}, #{trade_channel,jdbcType=VARCHAR}, #{trade_no,jdbcType=VARCHAR}, 
+      #{trade_status,jdbcType=VARCHAR}, #{trade_create_time,jdbcType=TIMESTAMP}, #{trade_pay_time,jdbcType=VARCHAR}, 
+      #{trade_close_time,jdbcType=VARCHAR}, #{trade_expire_time,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.blockchainlove.vow.domain.entity.VowTrade">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    insert into vow_trade
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gmt_create != null">
+        gmt_create,
+      </if>
+      <if test="gmt_modified != null">
+        gmt_modified,
+      </if>
+      <if test="order_no != null">
+        order_no,
+      </if>
+      <if test="trade_channel != null">
+        trade_channel,
+      </if>
+      <if test="trade_no != null">
+        trade_no,
+      </if>
+      <if test="trade_status != null">
+        trade_status,
+      </if>
+      <if test="trade_create_time != null">
+        trade_create_time,
+      </if>
+      <if test="trade_pay_time != null">
+        trade_pay_time,
+      </if>
+      <if test="trade_close_time != null">
+        trade_close_time,
+      </if>
+      <if test="trade_expire_time != null">
+        trade_expire_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="gmt_create != null">
+        #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null">
+        #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order_no != null">
+        #{order_no,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_channel != null">
+        #{trade_channel,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_no != null">
+        #{trade_no,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_status != null">
+        #{trade_status,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_create_time != null">
+        #{trade_create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trade_pay_time != null">
+        #{trade_pay_time,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_close_time != null">
+        #{trade_close_time,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_expire_time != null">
+        #{trade_expire_time,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blockchainlove.vow.domain.entity.VowTrade">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    update vow_trade
+    <set>
+      <if test="gmt_create != null">
+        gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null">
+        gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order_no != null">
+        order_no = #{order_no,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_channel != null">
+        trade_channel = #{trade_channel,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_no != null">
+        trade_no = #{trade_no,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_status != null">
+        trade_status = #{trade_status,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_create_time != null">
+        trade_create_time = #{trade_create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trade_pay_time != null">
+        trade_pay_time = #{trade_pay_time,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_close_time != null">
+        trade_close_time = #{trade_close_time,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_expire_time != null">
+        trade_expire_time = #{trade_expire_time,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blockchainlove.vow.domain.entity.VowTrade">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    update vow_trade
+    set gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      order_no = #{order_no,jdbcType=VARCHAR},
+      trade_channel = #{trade_channel,jdbcType=VARCHAR},
+      trade_no = #{trade_no,jdbcType=VARCHAR},
+      trade_status = #{trade_status,jdbcType=VARCHAR},
+      trade_create_time = #{trade_create_time,jdbcType=TIMESTAMP},
+      trade_pay_time = #{trade_pay_time,jdbcType=VARCHAR},
+      trade_close_time = #{trade_close_time,jdbcType=VARCHAR},
+      trade_expire_time = #{trade_expire_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

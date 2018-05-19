@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blockchainlove.vow.domain.dao.VowAddressMapper">
+  <resultMap id="BaseResultMap" type="com.blockchainlove.vow.domain.entity.VowAddress">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmt_modified" />
+    <result column="user_no" jdbcType="VARCHAR" property="user_no" />
+    <result column="country_code" jdbcType="VARCHAR" property="country_code" />
+    <result column="province_code" jdbcType="VARCHAR" property="province_code" />
+    <result column="city_code" jdbcType="VARCHAR" property="city_code" />
+    <result column="district_code" jdbcType="VARCHAR" property="district_code" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    id, gmt_create, gmt_modified, user_no, country_code, province_code, city_code, district_code, 
+    address
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from vow_address
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    delete from vow_address
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.blockchainlove.vow.domain.entity.VowAddress">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    insert into vow_address (id, gmt_create, gmt_modified, 
+      user_no, country_code, province_code, 
+      city_code, district_code, address
+      )
+    values (#{id,jdbcType=BIGINT}, #{gmt_create,jdbcType=TIMESTAMP}, #{gmt_modified,jdbcType=TIMESTAMP}, 
+      #{user_no,jdbcType=VARCHAR}, #{country_code,jdbcType=VARCHAR}, #{province_code,jdbcType=VARCHAR}, 
+      #{city_code,jdbcType=VARCHAR}, #{district_code,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.blockchainlove.vow.domain.entity.VowAddress">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    insert into vow_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gmt_create != null">
+        gmt_create,
+      </if>
+      <if test="gmt_modified != null">
+        gmt_modified,
+      </if>
+      <if test="user_no != null">
+        user_no,
+      </if>
+      <if test="country_code != null">
+        country_code,
+      </if>
+      <if test="province_code != null">
+        province_code,
+      </if>
+      <if test="city_code != null">
+        city_code,
+      </if>
+      <if test="district_code != null">
+        district_code,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="gmt_create != null">
+        #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null">
+        #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="user_no != null">
+        #{user_no,jdbcType=VARCHAR},
+      </if>
+      <if test="country_code != null">
+        #{country_code,jdbcType=VARCHAR},
+      </if>
+      <if test="province_code != null">
+        #{province_code,jdbcType=VARCHAR},
+      </if>
+      <if test="city_code != null">
+        #{city_code,jdbcType=VARCHAR},
+      </if>
+      <if test="district_code != null">
+        #{district_code,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blockchainlove.vow.domain.entity.VowAddress">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    update vow_address
+    <set>
+      <if test="gmt_create != null">
+        gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modified != null">
+        gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="user_no != null">
+        user_no = #{user_no,jdbcType=VARCHAR},
+      </if>
+      <if test="country_code != null">
+        country_code = #{country_code,jdbcType=VARCHAR},
+      </if>
+      <if test="province_code != null">
+        province_code = #{province_code,jdbcType=VARCHAR},
+      </if>
+      <if test="city_code != null">
+        city_code = #{city_code,jdbcType=VARCHAR},
+      </if>
+      <if test="district_code != null">
+        district_code = #{district_code,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blockchainlove.vow.domain.entity.VowAddress">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    update vow_address
+    set gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmt_modified,jdbcType=TIMESTAMP},
+      user_no = #{user_no,jdbcType=VARCHAR},
+      country_code = #{country_code,jdbcType=VARCHAR},
+      province_code = #{province_code,jdbcType=VARCHAR},
+      city_code = #{city_code,jdbcType=VARCHAR},
+      district_code = #{district_code,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

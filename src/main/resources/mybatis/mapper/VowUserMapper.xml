@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blockchainlove.vow.dao.VowUserMapper">
+  <resultMap id="BaseResultMap" type="com.blockchainlove.vow.domain.entity.VowUser">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="user_no" jdbcType="VARCHAR" property="userNo" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="captcha_code" jdbcType="VARCHAR" property="captchaCode" />
+    <result column="captcha_code_create_time" jdbcType="TIMESTAMP" property="captchaCodeCreateTime" />
+    <result column="sms_verify_code" jdbcType="VARCHAR" property="smsVerifyCode" />
+    <result column="sms_verify_code_create_time" jdbcType="TIMESTAMP" property="smsVerifyCodeCreateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    id, gmt_create, gmt_modified, login_name, password, user_no, nick_name, phone, auth_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from vow_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    delete from vow_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.blockchainlove.vow.domain.entity.VowUser">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    insert into vow_user (gmt_create, gmt_modified,
+      login_name, password, user_no, 
+      nick_name, phone, auth_code
+      )
+    values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+      #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR},
+      #{nickName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.blockchainlove.vow.domain.entity.VowUser">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    insert into vow_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="loginName != null">
+        login_name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="userNo != null">
+        user_no,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="authCode != null">
+        authCode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gmtCreate != null">
+        CURRENT_TIMESTAMP
+      </if>
+      <if test="gmtModified != null">
+        CURRENT_TIMESTAMP
+      </if>
+      <if test="loginName != null">
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userNo != null">
+        #{userNo,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="authCode != null">
+        #{authCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blockchainlove.vow.domain.entity.VowUser">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    update vow_user
+    <set>
+      <if test="gmt_modified != null">
+        CURRENT_TIMESTAMP
+      </if>
+      <if test="loginName != null">
+        login_name = #{login_name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userNo != null">
+        user_no = #{user_no,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nick_name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="authCode != null">
+        auth_code = #{authCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blockchainlove.vow.domain.entity.VowUser">
+    <!--
+      WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
+    -->
+    update vow_user
+    set gmt_modified = CURRENT_TIMESTAMP,
+      login_name = #{loginName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      user_no = #{userNo,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+    auth_code = #{authCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryUserByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vow_user
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+
+  <select id="lockUserByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vow_user
+    where phone = #{phone,jdbcType=VARCHAR}
+    for update
+  </select>
+
+  <update id="updateCaptchaCodeByPhone" parameterType="java.lang.String">
+    update vow_user
+    set gmt_modified = CURRENT_TIMESTAMP,
+    captcha_code = #{authCode,jdbcType=VARCHAR},
+    captcha_code_create_time = CURRENT_TIMESTAMP
+    where phone = #{phone,jdbcType=VARCHAR}
+  </update>
+
+</mapper>
