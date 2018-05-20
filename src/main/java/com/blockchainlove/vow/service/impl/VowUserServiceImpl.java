@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.blockchainlove.vow.common.constant.CommonConstant;
+import com.blockchainlove.vow.common.enums.BaseExceptionEnum;
+import com.blockchainlove.vow.common.exception.BaseException;
 import com.blockchainlove.vow.common.utils.GenerateNoUtil;
 import com.blockchainlove.vow.dao.VowUserMapper;
 import com.blockchainlove.vow.domain.entity.VowUser;
@@ -44,35 +46,62 @@ public class VowUserServiceImpl implements VowUserService {
      * @see VowUserService#updateCaptchaCodeByPhone
      */
     @Override
-    public String updateCaptchaCodeByPhone(String authCode, String phone) {
+    public String updateCaptchaCodeByPhone(String captchaCode, String phone) {
         VowUser vowUser = transactionTemplate.execute(new TransactionCallback<VowUser>() {
-                    @Override
-                    public VowUser doInTransaction(TransactionStatus status) {
-                        VowUser vowUser = vowUserMapper.lockUserByPhone(phone);
+            @Override
+            public VowUser doInTransaction(TransactionStatus status) {
+                VowUser vowUser = vowUserMapper.lockUserByPhone(phone);
 
-                        if (null == vowUser) {
-                            VowUser newUser = new VowUser();
-                            newUser.setLoginName(phone);
-                            newUser.setPhone(phone);
-                            newUser.setCaptchaCode(authCode);
-                            newUser.setCaptchaCodeCreateTime(new Date());
-                            String seqId = mysqlSequence.nextVal(CommonConstant.VOW_USER_SEQ_NAME);
-                            newUser.setUserNo(GenerateNoUtil.generateIdStr(seqId));
-                            vowUserMapper.insert(newUser);
+                if (null == vowUser) {
+                    VowUser newUser = new VowUser();
+                    newUser.setLoginName(phone);
+                    newUser.setPhone(phone);
+                    newUser.setCaptchaCode(captchaCode);
+                    newUser.setCaptchaCodeCreateTime(new Date());
+                    String seqId = mysqlSequence.nextVal(CommonConstant.VOW_USER_SEQ_NAME);
+                    newUser.setUserNo(GenerateNoUtil.generateIdStr(seqId));
+                    vowUserMapper.insert(newUser);
 
-                            vowUser = vowUserMapper.queryUserByPhone(phone);
-                        } else {
-                            Map map = new HashMap(4);
-                            map.put("phone", phone);
-                            map.put("authCode", authCode);
-                            vowUserMapper.updateCaptchaCodeByPhone(map);
+                    vowUser = vowUserMapper.queryUserByPhone(phone);
+                } else {
+                    Map map = new HashMap(4);
+                    map.put("phone", phone);
+                    map.put("captchaCode", captchaCode);
+                    vowUserMapper.updateCaptchaCodeByPhone(map);
 
-                            vowUser = vowUserMapper.selectByPrimaryKey(vowUser.getId());
-                        }
+                    vowUser = vowUserMapper.selectByPrimaryKey(vowUser.getId());
+                }
 
-                        return vowUser;
-                    }
-                });
+                return vowUser;
+            }
+        });
+
+        return null;
+    }
+
+    /**
+     * @see VowUserService#updateSMSVerifyCodeByPhone
+     */
+    @Override
+    public String updateSMSVerifyCodeByPhone(String smsVerifyCode, String phone) {
+        VowUser vowUser = transactionTemplate.execute(new TransactionCallback<VowUser>() {
+            @Override
+            public VowUser doInTransaction(TransactionStatus status) {
+                VowUser vowUser = vowUserMapper.lockUserByPhone(phone);
+
+                if (null == vowUser) {
+                    throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+                }
+                Map map = new HashMap(4);
+                map.put("phone", phone);
+                map.put("smsVerifyCode", smsVerifyCode);
+                vowUserMapper.updateSMSVerifyCodeByPhone(map);
+
+                vowUser = vowUserMapper.selectByPrimaryKey(vowUser.getId());
+
+                return vowUser;
+            }
+        });
 
         return null;
     }

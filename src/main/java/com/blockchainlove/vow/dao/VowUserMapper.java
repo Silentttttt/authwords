@@ -62,4 +62,12 @@ public interface VowUserMapper {
      * @return
      */
     int updateCaptchaCodeByPhone(Map map);
+
+    /**
+     * 根据phone更新captchaCode
+     *
+     * @param map
+     * @return
+     */
+    int updateSMSVerifyCodeByPhone(Map map);
 }

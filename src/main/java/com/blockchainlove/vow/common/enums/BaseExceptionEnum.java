@@ -14,9 +14,15 @@ public enum BaseExceptionEnum implements BaseEnum {
 
     SYSTEM_ERROR("SYSTEM_ERROR", "系统错误"),
 
-    ILLEAGL_PARAMETER("ILLEAGL_PARAMETER", "无效参数"),
+    ILLEGAL_PARAMETER("ILLEGAL_PARAMETER", "无效参数"),
 
     NO_LOGIN_INFO("NO_LOGIN_INFO", "用户尚未登陆"),
+
+    CAPTCHA_CODE_NOT_MATCH("CAPTCHA_CODE_NOT_MATCH", "人机校验不通过"),
+
+    CAPTCHA_CODE_TIMEOUT("CAPTCHA_CODE_TIMEOUT", "人机校验码已经超时，请重新生成"),
+
+    SEND_SMS_VERIFY_CODE_FAIL("SEND_SMS_VERIFY_CODE_FAIL", "短信验证码发送失败"),
     ;
 
     /**

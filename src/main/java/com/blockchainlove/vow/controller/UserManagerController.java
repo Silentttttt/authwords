@@ -4,15 +4,20 @@
  */
 package com.blockchainlove.vow.controller;
 
+import java.util.Date;
 import java.util.Map;
 
 import com.blockchainlove.vow.common.basemodel.SingleQueryResult;
 import com.blockchainlove.vow.common.enums.BaseExceptionEnum;
 import com.blockchainlove.vow.common.exception.BaseException;
 import com.blockchainlove.vow.common.utils.LoggerUtil;
+import com.blockchainlove.vow.dao.VowUserMapper;
+import com.blockchainlove.vow.domain.entity.VowUser;
 import com.blockchainlove.vow.service.CAPTCHAService;
+import com.blockchainlove.vow.service.SendSmsService;
 import com.blockchainlove.vow.service.VowUserService;
 import com.blockchainlove.vow.vo.request.CaptchaRequest;
+import com.blockchainlove.vow.vo.request.SmsVerifyCodeRequest;
 import com.blockchainlove.vow.vo.request.UserLoginRequest;
 import com.blockchainlove.vow.vo.response.UserInfo;
 import org.apache.commons.lang.StringUtils;
@@ -41,24 +46,34 @@ public class UserManagerController {
     private CAPTCHAService captchaService;
 
     @Autowired
+    @Qualifier("sendSmsServiceX")
+    private SendSmsService sendSmsService;
+
+    @Autowired
     @Qualifier("VowUserServiceX")
     private VowUserService vowUserService;
+
+    @Autowired
+    private VowUserMapper vowUserMapper;
 
     @RequestMapping("/getCAPTCHA")
     public SingleQueryResult<String> getCAPTCHA(@RequestBody CaptchaRequest bizRequest) {
         SingleQueryResult result = new SingleQueryResult();
 
         try {
+            if (null == bizRequest) {
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+            }
 
             String phone = bizRequest.getPhone();
             if (StringUtils.isBlank(phone)) {
-                throw new BaseException(BaseExceptionEnum.ILLEAGL_PARAMETER);
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
             }
             Map map = captchaService.getCode();
             String code = (String) map.get("code");
             String url = (String) map.get("codeUrl");
 
-            vowUserService.updateAuthCodeByPhone(code, phone);
+            vowUserService.updateCaptchaCodeByPhone(code, phone);
             //HttpSession session = request.getSession();
             //session.setAttribute("code", code);
 
@@ -81,36 +96,55 @@ public class UserManagerController {
     }
 
     @RequestMapping("/sendSmsVerifyCode")
-    public SingleQueryResult<String> sendSmsVerifyCode(@RequestBody CaptchaRequest bizRequest) {
+    public SingleQueryResult<String> sendSmsVerifyCode(@RequestBody SmsVerifyCodeRequest bizRequest) {
         SingleQueryResult result = new SingleQueryResult();
 
         try {
+            if (null == bizRequest) {
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+            }
 
             String phone = bizRequest.getPhone();
             if (StringUtils.isBlank(phone)) {
-                throw new BaseException(BaseExceptionEnum.ILLEAGL_PARAMETER);
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
             }
-            Map map = captchaService.getCode();
-            String code = (String) map.get("code");
-            String url = (String) map.get("codeUrl");
 
-            vowUserService.updateAuthCodeByPhone(code, phone);
-            //HttpSession session = request.getSession();
-            //session.setAttribute("code", code);
+            String captchaCode = bizRequest.getCaptchaCode();
+            if (StringUtils.isBlank(captchaCode)) {
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+            }
 
-            result.setValue(url);
+            VowUser vowUser = vowUserMapper.queryUserByPhone(bizRequest.getPhone());
+            if (null == vowUser) {
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+            }
+            if (!StringUtils.equals(vowUser.getCaptchaCode(), captchaCode)) {
+                throw new BaseException(BaseExceptionEnum.CAPTCHA_CODE_NOT_MATCH);
+            }
+            //人机识别码有效期5分钟，超过时间需要重新生成
+            if (new Date().getTime() - vowUser.getCaptchaCodeCreateTime().getTime() > 5 * 60 * 1000) {
+                throw new BaseException(BaseExceptionEnum.CAPTCHA_CODE_TIMEOUT);
+            }
+            //短信码一分钟内只能生成一次
+            if (new Date().getTime() - vowUser.getCaptchaCodeCreateTime().getTime() < 1 * 60 * 1000) {
+                throw new BaseException(BaseExceptionEnum.CAPTCHA_CODE_TIMEOUT);
+            }
+
+            String smsVerifyCode = sendSmsService.getSMSVerifyCode(phone);
+            vowUserService.updateSMSVerifyCodeByPhone(smsVerifyCode, phone);
+
 
             return result;
         } catch (BaseException e) {
             result.setSuccess(false);
             result.setErrorCode(e.getErrorEnum().getCode());
             result.setErrorMsg(e.getErrorEnum().getDesc());
-            LoggerUtil.error(e, logger, "UserManagerController.getCAPTCHA出现业务异常,bizRequest={0}", bizRequest);
+            LoggerUtil.error(e, logger, "UserManagerController.sendSmsVerifyCode出现业务异常,bizRequest={0}", bizRequest);
         } catch (Exception e) {
             result.setSuccess(false);
             result.setErrorCode(BaseExceptionEnum.SYSTEM_ERROR.getCode());
             result.setErrorMsg(BaseExceptionEnum.SYSTEM_ERROR.getDesc());
-            LoggerUtil.error(e, logger, "UserManagerController.getCAPTCHA出现系统异常,bizRequest={0}", bizRequest);
+            LoggerUtil.error(e, logger, "UserManagerController.sendSmsVerifyCode出现系统异常,bizRequest={0}", bizRequest);
         }
 
         return null;

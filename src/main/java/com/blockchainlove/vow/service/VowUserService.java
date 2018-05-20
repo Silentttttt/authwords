@@ -17,7 +17,7 @@ public interface VowUserService {
      * @param phone
      * @return
      */
-    String updateCaptchaCodeByPhone(String authCode, String phone);
+    String updateCaptchaCodeByPhone(String captchaCode, String phone);
 
     /**
      * 更新短信验证码到表中
@@ -25,5 +25,5 @@ public interface VowUserService {
      * @param phone
      * @return
      */
-    String updateSMSVerifyCodeByPhone(String authCode, String phone);
+    String updateSMSVerifyCodeByPhone(String smsVerifyCode, String phone);
 }

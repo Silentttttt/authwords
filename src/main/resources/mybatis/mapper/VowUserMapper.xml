@@ -22,7 +22,7 @@
     <!--
       WARNING - @mbg.generated  This element was generated on Mon Apr 30 21:01:24 CST 2018. by MyBatis Generator, do not modify.
     -->
-    id, gmt_create, gmt_modified, login_name, password, user_no, nick_name, phone, auth_code
+    id, gmt_create, gmt_modified, login_name, password, user_no, nick_name, phone, captcha_code, captcha_code_create_time, sms_verify_code, sms_verify_code_create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
@@ -46,11 +46,13 @@
     -->
     insert into vow_user (gmt_create, gmt_modified,
       login_name, password, user_no, 
-      nick_name, phone, auth_code
+      nick_name, phone, captcha_code,
+      captcha_code_create_time, sms_verify_code, sms_verify_code_create_time
       )
     values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
       #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR},
-      #{nickName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}
+      #{nickName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{captchaCode,jdbcType=VARCHAR},
+      #{captchaCodeCreateTime,jdbcType=TIMESTAMP}, #{smsVerifyCode,jdbcType=VARCHAR}, #{smsVerifyCodeCreateTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.blockchainlove.vow.domain.entity.VowUser">
@@ -59,12 +61,8 @@
     -->
     insert into vow_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="gmtCreate != null">
         gmt_create,
-      </if>
-      <if test="gmtModified != null">
         gmt_modified,
-      </if>
       <if test="loginName != null">
         login_name,
       </if>
@@ -80,17 +78,22 @@
       <if test="phone != null">
         phone,
       </if>
-      <if test="authCode != null">
-        authCode,
+      <if test="captchaCode != null">
+        captcha_code,
+      </if>
+      <if test="captchaCodeCreateTime != null">
+        captcha_code_create_time,
+      </if>
+      <if test="smsVerifyCode != null">
+        sms_verify_code,
+      </if>
+      <if test="smsVerifyCodeCreateTime != null">
+        sms_verify_code_create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="gmtCreate != null">
-        CURRENT_TIMESTAMP
-      </if>
-      <if test="gmtModified != null">
-        CURRENT_TIMESTAMP
-      </if>
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP,
       <if test="loginName != null">
         #{loginName,jdbcType=VARCHAR},
       </if>
@@ -106,8 +109,17 @@
       <if test="phone != null">
         #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="authCode != null">
-        #{authCode,jdbcType=VARCHAR},
+      <if test="captchaCode != null">
+        #{captchaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="captchaCodeCreateTime != null">
+        #{captchaCodeCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="smsVerifyCode != null">
+        #{smsVerifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="smsVerifyCodeCreateTime != null">
+        #{smsVerifyCodeCreateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -135,9 +147,19 @@
       <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="authCode != null">
-        auth_code = #{authCode,jdbcType=VARCHAR},
+      <if test="captchaCode != null">
+        captcha_code = #{captchaCode,jdbcType=VARCHAR},
       </if>
+      <if test="captchaCodeCreateTime != null">
+        captcha_code_create_time = #{captchaCodeCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="smsVerifyCode != null">
+        sms_verify_code = #{smsVerifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="smsVerifyCodeCreateTime != null">
+        sms_verify_code_create_time = #{smsVerifyCodeCreateTime,jdbcType=TIMESTAMP},
+      </if>
+
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -152,7 +174,10 @@
       user_no = #{userNo,jdbcType=VARCHAR},
       nick_name = #{nickName,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-    auth_code = #{authCode,jdbcType=VARCHAR}
+      captcha_code = #{captchaCode,jdbcType=VARCHAR},
+      captcha_code_create_time = #{captchaCodeCreateTime,jdbcType=TIMESTAMP},
+      sms_verify_code = #{smsVerifyCode,jdbcType=VARCHAR},
+      sms_verify_code_create_time = #{smsVerifyCodeCreateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -174,9 +199,18 @@
   <update id="updateCaptchaCodeByPhone" parameterType="java.lang.String">
     update vow_user
     set gmt_modified = CURRENT_TIMESTAMP,
-    captcha_code = #{authCode,jdbcType=VARCHAR},
+    captcha_code = #{captchaCode,jdbcType=VARCHAR},
     captcha_code_create_time = CURRENT_TIMESTAMP
     where phone = #{phone,jdbcType=VARCHAR}
   </update>
+
+  <update id="updateSMSVerifyCodeByPhone" parameterType="java.lang.String">
+    update vow_user
+    set gmt_modified = CURRENT_TIMESTAMP,
+    sms_verify_code = #{smsVerifyCode,jdbcType=VARCHAR},
+    sms_verify_code_create_time = CURRENT_TIMESTAMP
+    where phone = #{phone,jdbcType=VARCHAR}
+  </update>
+
 
 </mapper>

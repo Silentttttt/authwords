@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
+ * 测试参数
  *
  * @author zhangyu
  * @version $Id: NeoProperties.java, v 0.1 2018年04月30日 上午8:23 zhangyu Exp $

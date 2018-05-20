@@ -31,6 +31,31 @@ public class CAPTCHAUtil {
     private static char[] codeSequence = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
             'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
+    private static int codeCountSix = 6;
+    private static char[] numberSequence = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+    /**
+     * 生成6位随机数
+     * @return
+     */
+    public static String generateCode() {
+        // 创建一个随机数生成器类
+        Random random = new Random();
+        // randomCode用于保存随机产生的验证码，以便用户登录后进行验证。
+        StringBuffer randomCode = new StringBuffer();
+
+        // 随机产生codeCount数字的验证码。
+        for (int i = 0; i < codeCountSix; i++) {
+            // 得到随机产生的验证码数字。
+            String code = String.valueOf(numberSequence[random.nextInt(10)]);
+
+            // 将产生的四个随机数组合在一起。
+            randomCode.append(code);
+        }
+
+        return randomCode.toString();
+    }
+
     /**
      * 生成一个map集合
      * code为生成的验证码
