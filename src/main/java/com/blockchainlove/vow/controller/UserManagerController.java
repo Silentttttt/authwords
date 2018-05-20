@@ -4,10 +4,13 @@
  */
 package com.blockchainlove.vow.controller;
 
-import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.blockchainlove.vow.common.basemodel.SingleQueryResult;
+import com.blockchainlove.vow.common.constant.CommonConstant;
 import com.blockchainlove.vow.common.enums.BaseExceptionEnum;
 import com.blockchainlove.vow.common.exception.BaseException;
 import com.blockchainlove.vow.common.utils.LoggerUtil;
@@ -17,6 +20,7 @@ import com.blockchainlove.vow.service.CAPTCHAService;
 import com.blockchainlove.vow.service.SendSmsService;
 import com.blockchainlove.vow.service.VowUserService;
 import com.blockchainlove.vow.vo.request.CaptchaRequest;
+import com.blockchainlove.vow.vo.request.LoginRequest;
 import com.blockchainlove.vow.vo.request.SmsVerifyCodeRequest;
 import com.blockchainlove.vow.vo.request.UserLoginRequest;
 import com.blockchainlove.vow.vo.response.UserInfo;
@@ -118,21 +122,20 @@ public class UserManagerController {
             if (null == vowUser) {
                 throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
             }
+            //人机识别码有效期5分钟，超过时间需要重新生成
+            if (System.currentTimeMillis() - vowUser.getCaptchaCodeCreateTime().getTime() > 5 * 60 * 1000) {
+                throw new BaseException(BaseExceptionEnum.CAPTCHA_CODE_TIMEOUT);
+            }
             if (!StringUtils.equals(vowUser.getCaptchaCode(), captchaCode)) {
                 throw new BaseException(BaseExceptionEnum.CAPTCHA_CODE_NOT_MATCH);
             }
-            //人机识别码有效期5分钟，超过时间需要重新生成
-            if (new Date().getTime() - vowUser.getCaptchaCodeCreateTime().getTime() > 5 * 60 * 1000) {
-                throw new BaseException(BaseExceptionEnum.CAPTCHA_CODE_TIMEOUT);
-            }
             //短信码一分钟内只能生成一次
-            if (new Date().getTime() - vowUser.getCaptchaCodeCreateTime().getTime() < 1 * 60 * 1000) {
+            if (System.currentTimeMillis() - vowUser.getCaptchaCodeCreateTime().getTime() < 1 * 60 * 1000) {
                 throw new BaseException(BaseExceptionEnum.CAPTCHA_CODE_TIMEOUT);
             }
 
             String smsVerifyCode = sendSmsService.getSMSVerifyCode(phone);
             vowUserService.updateSMSVerifyCodeByPhone(smsVerifyCode, phone);
-
 
             return result;
         } catch (BaseException e) {
@@ -161,7 +164,52 @@ public class UserManagerController {
     }
 
     @RequestMapping("/login")
-    public SingleQueryResult<UserInfo> getUsers(UserLoginRequest request) {
+    public SingleQueryResult<String> login(@RequestBody LoginRequest bizRequest, HttpServletRequest httpRequest) {
+        SingleQueryResult result = new SingleQueryResult();
+
+        try {
+            if (null == bizRequest) {
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+            }
+
+            String phone = bizRequest.getPhone();
+            if (StringUtils.isBlank(phone)) {
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+            }
+
+            String smsVerifyCode = bizRequest.getSmsVerifyCode();
+            if (StringUtils.isBlank(smsVerifyCode)) {
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+            }
+
+            VowUser vowUser = vowUserMapper.queryUserByPhone(bizRequest.getPhone());
+            if (null == vowUser) {
+                throw new BaseException(BaseExceptionEnum.ILLEGAL_PARAMETER);
+            }
+            //短信验证码有效期5分钟，超过时间需要重新生成
+            if (System.currentTimeMillis() - vowUser.getSmsVerifyCodeCreateTime().getTime() > 5 * 60 * 1000) {
+                throw new BaseException(BaseExceptionEnum.SMS_VERIFY_CODE_TIMEOUT);
+            }
+            if (!StringUtils.equals(vowUser.getSmsVerifyCode(), smsVerifyCode)) {
+                throw new BaseException(BaseExceptionEnum.SMS_VERIFY_CODE_NOT_MATCH);
+            }
+
+            HttpSession session = httpRequest.getSession();
+            session.setAttribute(CommonConstant.LOGIN_ATTR_KEY, vowUser.getId());
+
+            return result;
+        } catch (BaseException e) {
+            result.setSuccess(false);
+            result.setErrorCode(e.getErrorEnum().getCode());
+            result.setErrorMsg(e.getErrorEnum().getDesc());
+            LoggerUtil.error(e, logger, "UserManagerController.sendSmsVerifyCode出现业务异常,bizRequest={0}", bizRequest);
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setErrorCode(BaseExceptionEnum.SYSTEM_ERROR.getCode());
+            result.setErrorMsg(BaseExceptionEnum.SYSTEM_ERROR.getDesc());
+            LoggerUtil.error(e, logger, "UserManagerController.sendSmsVerifyCode出现系统异常,bizRequest={0}", bizRequest);
+        }
+
         return null;
     }
 

@@ -22,6 +22,10 @@ public enum BaseExceptionEnum implements BaseEnum {
 
     CAPTCHA_CODE_TIMEOUT("CAPTCHA_CODE_TIMEOUT", "人机校验码已经超时，请重新生成"),
 
+    SMS_VERIFY_CODE_NOT_MATCH("SMS_VERIFY_CODE_NOT_MATCH", "短信验证码不通过"),
+
+    SMS_VERIFY_CODE_TIMEOUT("SMS_VERIFY_CODE_TIMEOUT", "短信验证码已经超时，请重新生成"),
+
     SEND_SMS_VERIFY_CODE_FAIL("SEND_SMS_VERIFY_CODE_FAIL", "短信验证码发送失败"),
     ;
 
